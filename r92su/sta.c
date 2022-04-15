@@ -137,7 +137,6 @@ struct r92su_sta *r92su_sta_alloc(struct r92su *r92su, const u8 *mac_addr,
 	sta = kzalloc(sizeof(*sta), flag);
 	if (sta) {
 		unsigned long flags;
-		struct timespec uptime;
 		int i;
 
 		for (i = 0; i < ARRAY_SIZE(sta->defrag); i++)
@@ -148,8 +147,7 @@ struct r92su_sta *r92su_sta_alloc(struct r92su *r92su, const u8 *mac_addr,
 		sta->mac_id = mac_id;
 		sta->aid = aid;
 
-		ktime_get_ts(&uptime);
-		sta->last_connected = uptime.tv_sec;
+		sta->last_connected = ktime_get_seconds();
 
 		/* Remove the old station */
 		r92su_sta_del(r92su, mac_id);
@@ -300,7 +298,6 @@ void r92su_key_free(struct r92su_key *key)
 void r92su_sta_set_sinfo(struct r92su *r92su, struct r92su_sta *sta,
 			 struct station_info *sinfo)
 {
-	struct timespec uptime;
 	struct cfg80211_bss *bss;
 	struct r92su_bss_priv *bss_priv;
 	sinfo->generation = r92su->sta_generation;
@@ -310,8 +307,7 @@ void r92su_sta_set_sinfo(struct r92su *r92su, struct r92su_sta *sta,
 			BIT(NL80211_STA_INFO_STA_FLAGS) |
 			BIT(NL80211_STA_INFO_SIGNAL);
 
-	ktime_get_ts(&uptime);
-	sinfo->connected_time = uptime.tv_sec - sta->last_connected;
+	sinfo->connected_time = ktime_get_seconds() - sta->last_connected;
 	sinfo->signal = sta->signal;
 	sinfo->rxrate.flags = sta->last_rx_rate_flag;
 	sinfo->rxrate.bw = sta->last_rx_rate_bw;

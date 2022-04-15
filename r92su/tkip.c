@@ -14,8 +14,9 @@
 #include <asm/unaligned.h>
 #include <net/cfg80211.h>
 
-#include "tkip.h"
 #include "wep.h"
+#include "tkip.h"
+
 
 #define PHASE1_LOOP_COUNT 8
 

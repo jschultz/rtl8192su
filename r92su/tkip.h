@@ -26,7 +26,7 @@ struct tkip_ctx {
 };
 
 void ieee80211_tkip_encrypt_data(struct crypto_cipher *tfm,
-				 const u8 *key, struct sk_buff *skb, u64 pn);
+				 const u8 *tk, struct sk_buff *skb, const u64 pn);
 int ieee80211_tkip_decrypt_data(struct crypto_cipher *tfm,
-				const u8 *key, struct sk_buff *skb, u64 pn);
+				const u8 *tk, struct sk_buff *skb, u64 pn);
 #endif /* TKIP_H */

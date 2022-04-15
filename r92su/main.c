@@ -1603,7 +1603,7 @@ static const struct net_device_ops r92su_netdevice_ops = {
 	.ndo_start_xmit = r92su_start_xmit,
 	.ndo_set_mac_address = eth_mac_addr,
 	.ndo_set_rx_mode = r92su_set_rx_mode,
-	.ndo_change_mtu = eth_change_mtu,
+	.ndo_change_mtu = dev_set_mtu,
 	.ndo_validate_addr = eth_validate_addr,
 };
 

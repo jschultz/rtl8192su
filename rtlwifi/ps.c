@@ -55,7 +55,12 @@ bool rtl_ps_enable_nic(struct ieee80211_hw *hw)
 	rtlpriv->cfg->ops->enable_interrupt(hw);
 
 	/*<enable timer> */
-	rtl_watch_dog_timer_callback((unsigned long)hw);
+// 	rtl_watch_dog_timer_callback(hw);
+    queue_delayed_work(rtlpriv->works.rtl_wq,
+              &rtlpriv->works.watchdog_wq, 0);
+
+    mod_timer(&rtlpriv->works.watchdog_timer,
+          jiffies + MSECS(RTL_WATCH_DOG_TIME));
 
 	return true;
 }

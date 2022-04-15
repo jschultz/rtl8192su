@@ -19,8 +19,13 @@
 #include <linux/ieee80211.h>
 #include <net/cfg80211.h>
 #include <asm/unaligned.h>
+#include <linux/crypto.h>
+#include <crypto/internal/skcipher.h>
+// #include <crypto/internal/cipher.h>
 
 #include "wep.h"
+
+MODULE_IMPORT_NS(CRYPTO_INTERNAL);
 
 struct crypto_cipher *ieee80211_wep_init(void)
 {

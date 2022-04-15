@@ -421,7 +421,7 @@ static void rtl_pci_parse_configuration(struct pci_dev *pdev,
 	u16 linkctrl_reg;
 
 	/*Link Control Register */
-	pcie_capability_read_word(pdev, PCI_EXP_LNKCTL, &linkctrl_reg);
+	pci_read_config_word(pdev, PCI_EXP_LNKCTL, &linkctrl_reg);
 	pcipriv->ndis_adapter.linkctrl_reg = (u8)linkctrl_reg;
 
 	RT_TRACE(rtlpriv, COMP_INIT, DBG_TRACE, "Link Control Register =%x\n",
@@ -2085,8 +2085,8 @@ static int rtl_pci_intr_mode_msi(struct ieee80211_hw *hw)
 	struct rtl_pci *rtlpci = rtl_pcidev(pcipriv);
 	int ret;
 
-	ret = pci_enable_msi(rtlpci->pdev);
-	if (ret < 0)
+	ret = pci_in_msi_mode(rtlpci->pdev);
+	if (!ret)
 		return ret;
 
 	ret = request_irq(rtlpci->pdev->irq, &_rtl_pci_interrupt,
@@ -2332,8 +2332,8 @@ void rtl_pci_disconnect(struct pci_dev *pdev)
 		rtlpci->irq_alloc = 0;
 	}
 
-	if (rtlpci->using_msi)
-		pci_disable_msi(rtlpci->pdev);
+// 	if (rtlpci->using_msi)
+// 		pci_disable_msi(rtlpci->pdev);
 
 	list_del(&rtlpriv->list);
 	if (rtlpriv->io.pci_mem_start != 0) {
